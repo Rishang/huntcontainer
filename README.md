@@ -4,10 +4,12 @@
 
 **requirements:** Having Docker installed.
 
-## step-1
-Directly pull from dockerhub:
+## Installation
+Directly pull from dockerhub (Easyway):
 
 > `docker pull rishang/seccontainer`
+
+> `docker run -it -v $YourWorkDir:/root/test --name="testing" seccontainer`
 
 Or
 
@@ -15,8 +17,8 @@ Or
 
 > `docker build -t seccontainer .`
 
-## step-2
-
 > `docker run -it -v $YourWorkDir:/root/test --name="testing" seccontainer`
+
+---------
 
 The `unminify` command is for adding more tools based on category
