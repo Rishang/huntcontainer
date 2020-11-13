@@ -18,8 +18,9 @@ RUN go get -u github.com/golang/dep/cmd/dep \
     # gitrob
     # && go get -u -v github.com/michenriksen/gitrob 
     # go buster
-    && go get -u -v github.com/OJ/gobuster
-
+    && go get -u -v github.com/OJ/gobuster \
+    # aquatone
+    && go get -u github.com/michenriksen/aquatone
 
 FROM kalilinux/kali-rolling:latest
 
@@ -29,7 +30,8 @@ ENV LC_ALL C.UTF-8
 ENV LANG en_US.UTF-8
 ENV LANGUAGE en_US.UTF-8
 ENV TERM="xterm-256color"
-# golang tools
+
+# golang Env
 ENV GOPATH='/root/go'
 ENV PATH="${PATH}:${GOPATH}/bin"
 
@@ -51,7 +53,7 @@ RUN echo "deb http://kali.download/kali kali-rolling main contrib non-free" > /e
         openssh-client ftp \
         gron jq \
         nmap ncat host \
-        python3-minimal python3-distutils \
+        python3-minimal python3-distutils python3-dnspython \
     # python pip
     && curl https://bootstrap.pypa.io/get-pip.py -o get-pip.py \
     && python3 get-pip.py
@@ -77,5 +79,3 @@ RUN \
 WORKDIR /root/test
 
 COPY ./unminify.sh /usr/bin/unminify
-
-# https://github.com/elceef/dnstwist
