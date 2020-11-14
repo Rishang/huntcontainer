@@ -52,9 +52,9 @@ RUN \
         iputils-ping iproute2 net-tools \
         whois tcpdump \
         openssh-client ftp \
+        binutils \
         # infosec tools
         dnsenum amass \
-        binutils \
         gron jq \
         nmap ncat host \
         nikto exploitdb \
