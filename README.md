@@ -10,7 +10,7 @@ Directly pull from dockerhub (Easyway):
 
     docker pull rishang/seccontainer
 
-    docker run -it -v $YourWorkDir:/root/test --name="testing" seccontainer
+    docker run -it -v $YourWorkDir:/root/test --name="testing" rishang/seccontainer
 
 ---------
 
