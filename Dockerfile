@@ -38,9 +38,11 @@ ENV PATH="${PATH}:${GOPATH}/bin"
 COPY --from=go-build /go/bin/* /root/go/bin/
 
 # core packages
-RUN echo "deb http://kali.download/kali kali-rolling main contrib non-free" > /etc/apt/sources.list \
+RUN \
+    # mirror deb-repo
+    echo "deb http://kali.download/kali kali-rolling main contrib non-free" > /etc/apt/sources.list \
     && apt update \
-    && apt install --upgrade -y musl \
+    && apt install --upgrade -y sudo musl \
         bash bash-completion \
         curl wget \
         vim nano \
@@ -49,10 +51,13 @@ RUN echo "deb http://kali.download/kali kali-rolling main contrib non-free" > /e
         mlocate man-db \
         iputils-ping iproute2 net-tools \
         whois tcpdump \
-        dnsenum amass \
         openssh-client ftp \
+        # infosec tools
+        dnsenum amass \
+        binutils \
         gron jq \
         nmap ncat host \
+        nikto exploitdb \
         python3-minimal python3-distutils python3-dnspython \
     # python pip
     && curl https://bootstrap.pypa.io/get-pip.py -o get-pip.py \
@@ -74,8 +79,10 @@ RUN \
     && git clone --depth 1 "https://github.com/1ndianl33t/Gf-Patterns.git" \
     && cp gf/gf-completion.bash Gf-Patterns/*.json gf/examples/*.json ~/.gf \
     && echo 'source ~/.gf/gf-completion.bash' >> ~/.bashrc \
-    && rm -rf /tmp/gf /tmp/Gf-Patterns 
-
+    && rm -rf /tmp/gf /tmp/Gf-Patterns \
+    # nuclei templates
+    && nuclei -update-templates
+    
 WORKDIR /root/test
 
 COPY ./unminify.sh /usr/bin/unminify
