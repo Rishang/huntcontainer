@@ -8,7 +8,7 @@
 
 Directly pull from dockerhub (Easyway):
 
-    docker pull rishang/seccontainer` 
+    docker pull rishang/seccontainer
 
     docker run -it -v $YourWorkDir:/root/test --name="testing" seccontainer
 
@@ -36,7 +36,7 @@ This are list tools are present inside the image.
 
 ## unminify
 
-The `unminify` command is for adding more tools based on category.**
+The `unminify` command is for adding more tools based on category.
 
 **Note:** Those tools are not pre-installed so it will get downloaded and counfigured
 
@@ -64,7 +64,7 @@ The `unminify` command is for adding more tools based on category.**
   - seclist
   - exrex
 
-- ## socialEngineering
+- ## socialeng
 
   - sherlock
 
@@ -72,3 +72,6 @@ The `unminify` command is for adding more tools based on category.**
 
   - tor
   - proxychains
+
+- ## all
+  - To setup tools of all categories
