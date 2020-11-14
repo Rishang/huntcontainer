@@ -74,4 +74,5 @@ The `unminify` command is for adding more tools based on category.
   - proxychains
 
 - ## all
+
   - To setup tools of all categories
