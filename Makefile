@@ -1,5 +1,6 @@
+maintainer = rishang
 image = seccontainer
-dockerHubImage = rishang/${image}
+dockerHubImage = ${maintainer}/${image}
 
 dangling = docker images --filter dangling=true
 rmi = docker rmi
