@@ -8,7 +8,19 @@ CYAN="\033[0;36m"
 NC='\033[0m' # No Color
 
 # directory for git-cone tools
-toolsDir="~/tools"
+if [ "$(whoami)" == "root" ];then
+    toolsDir="/$(whoami)/tools"
+    if ! [ -e "$toolsDir" ];then
+        echo "folder $toolsDir created for saving git clone"
+        mkdir -p "$toolsDir"
+    fi
+else
+    toolsDir="/home/$(whoami)/tools"
+    if ! [ -e "$toolsDir" ];then
+        echo "folder $toolsDir created for saving git clone"
+        mkdir -p "$toolsDir"
+    fi
+fi
 
 # apt and pip tool name list
 aptTools=()
@@ -52,6 +64,7 @@ function askContinue
     echo -e "Press ${CYAN}any-key${NC} to Continue -OR- ${RED}Ctrl-C${NC} to abort"
     read
 }
+# -------------------------------------------------
 
 # web testing tools
 function web {
@@ -158,16 +171,16 @@ case $1 in
     tor)
         tor
     ;;
-    all)
-        web
-        tor
-        wordlists
-        social
-    ;;
     wordlists)
         wordlists
     ;;
     social)
+        social
+    ;;
+    all)
+        web
+        tor
+        wordlists
         social
     ;;
     *)
