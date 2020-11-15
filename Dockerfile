@@ -59,9 +59,10 @@ RUN \
         nmap ncat host \
         nikto exploitdb \
         python3-minimal python3-distutils python3-dnspython \
-    # python pip
+    # python & python pip
+    && update-alternatives --install /usr/bin/python python /usr/bin/python3 1 \
     && curl https://bootstrap.pypa.io/get-pip.py -o get-pip.py \
-    && python3 get-pip.py
+    && python get-pip.py
 
 # workdir & bash shell theme (oh-my-bash)
 RUN bash -c "$(curl -fsSL https://raw.githubusercontent.com/ohmybash/oh-my-bash/master/tools/install.sh)" \
