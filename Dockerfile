@@ -81,8 +81,10 @@ RUN \
     && echo 'source ~/.gf/gf-completion.bash' >> ~/.bashrc \
     && rm -rf /tmp/gf /tmp/Gf-Patterns \
     # nuclei templates
-    && nuclei -update-templates
-    
+    && nuclei -update-templates \
+    # tmux PATH fix
+    && echo "export PATH=${PATH}" >> ~/.bashrc
+
 WORKDIR /root/test
 
 COPY ./unminify.sh /usr/bin/unminify
