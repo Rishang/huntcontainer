@@ -128,6 +128,8 @@ function tor {
     # check tor
     echo "Checking Tor"
     curl -s --socks5 127.0.0.1:9050 'https://check.torproject.org/api/ip'
+    echo "Checking Tor from proxychains"
+    proxychains curl 'https://check.torproject.org/api/ip'
     echo
 }
 
