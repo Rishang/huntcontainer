@@ -1,34 +1,108 @@
 #!/usr/bin/bash
 
-function askContinue {
-    echo "Press any-key to continue Or Ctrl+C to abort"
+# colors
+GREEN="\033[0;32m"
+LightBlue="\033[1;34m"
+RED="\033[0;31m"
+CYAN="\033[0;36m"
+NC='\033[0m' # No Color
+
+# directory for git-cone tools
+toolsDir="~/tools"
+
+# apt and pip tool name list
+aptTools=()
+pipTools=()
+
+# print values present in array
+function showList
+{
+    list="$*"
+    for i in ${list[@]};do
+        echo -e "${GREEN} $i ${NC}"
+    done
+}
+
+# apt install values present in array
+function aptInstall
+{
+    list="$*"
+    for i in "${list[@]}";do
+        apt install -y $i
+    done
+}
+
+# pip install values present in array
+function pipInstall
+{
+    list="$*"
+    for i in ${list[@]};do
+        pip install -U "$i"
+    done
+}
+
+# print list of tools which will get installed & ask to continue
+function askContinue 
+{
+    echo -e "${LightBlue}Following tools will get installed:${NC}"
+    
+    showList "${aptTools[@]}"
+    showList "${pipTools[@]}"
+
+    echo -e "Press ${CYAN}any-key${NC} to Continue -OR- ${RED}Ctrl-C${NC} to abort"
     read
 }
 
+# web testing tools
 function web {
+        
+    local aptTools=(
+        "wpscan"
+        "wafw00f"
+        "whatweb"
+        "sublist3r"
+        "subjack"
+        "wfuzz"
+        "dirbuster"
+        "sqlmap"
+        "sslscan"
+        "knockpy"
+    )
+
+    local pipTools=(
+        "shodan"
+        "dnstwist"
+    )
+
     askContinue
 
-    apt install -y \
-                wpscan \
-                wafw00f \
-                whatweb \
-                sublist3r \
-                subjack \
-                wfuzz \
-                dirbuster \
-                sqlmap \
-                sslscan
+    aptInstall ${aptTools[@]}
+    pipInstall "${pipTools[@]}"
     
-    # python tools
-    pip3 install -U shodan
-    pip3 install -U dnstwist
+
+    # Photon
+    git clone --depth 1 https://github.com/s0md3v/Photon $toolsDir/Photon
+    if [ -e $toolsDir/Photon/requirements.txt ];then pip install -r $toolsDir/Photon/requirements.txt;fi
+
+    # XSStrike XSS scanner.
+    git clone https://github.com/s0md3v/XSStrike.git $toolsDir/XSStrike
+    if [ -e $toolsDir/XSStrike/requirements.txt ];then pip install -r $toolsDir/XSStrike/requirements.txt;fi
+
 }
 
+# tor setup
 function tor {
+    
+    # tor proxychain setup
+    local aptTools=(
+        "tor"
+        "proxychains4"
+        "curl"
+    )
     askContinue
 
-    # tor proxychain setup
-    apt install -y tor proxychains4 
+    aptInstall "${aptTools[@]}"
+    
     service tor start
     
     # config proxychains to be quite
@@ -44,21 +118,39 @@ function tor {
     echo
 }
 
+# wordlist & wordlist tools setup
 function wordlists {
-    askContinue
 
-    apt install seclists
+    local aptTools=(
+        "seclists"
+    )
     
+    local pipTools=(
     # regex fuzz wordlist generator
-    pip3 install -U exrex
-}
+        "exrex"
+    )
 
-function socialeng {
     askContinue
 
-    apt install -y sherlock
+    aptInstall "${aptTools[@]}"
+    pipInstall "${pipTools[@]}"
+
+    # PayloadsAllTheThings
+    git clone https://github.com/swisskyrepo/PayloadsAllTheThings.git $toolsDir/PayloadsAllTheThings
 }
 
+function social {
+
+    aptTools=(
+        "sherlock"
+    )
+
+    askContinue
+    
+    aptInstall "${aptTools[@]}"
+}
+
+# cases 
 case $1 in
     web)
         web
@@ -70,13 +162,16 @@ case $1 in
         web
         tor
         wordlists
-        socialeng
+        social
     ;;
     wordlists)
         wordlists
     ;;
+    social)
+        social
+    ;;
     *)
-        echo "Usage:   unminify { web|wordlists|tor|socialeng|all }"
+        echo "Usage:   unminify { web|wordlists|tor|social|all }"
         echo "Example: unminfy web"
         exit 1
     ;;
