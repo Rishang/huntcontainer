@@ -3,24 +3,34 @@ FROM golang:alpine AS go-build
 RUN apk add --no-cache --upgrade git openssh-client ca-certificates
 ENV GO111MODULE=auto
 RUN go get -u github.com/golang/dep/cmd/dep \
-    # subfinder
+    && echo "subfinder" \
     && go get -u -v github.com/projectdiscovery/subfinder/v2/cmd/subfinder \
-    # gau
+    && echo "gau" \
     && go get -u -v github.com/lc/gau \
-    # fuff
+    && echo "fuff" \
     && go get -u -v github.com/ffuf/ffuf \
-    # gf
+    && echo "gf" \
     && go get -u -v github.com/tomnomnom/gf \
-    # httpx
+    && echo "httpx" \
     && go get -u -v github.com/projectdiscovery/httpx/cmd/httpx \
-    # project discovery nuclei
-    && go get -u -v github.com/projectdiscovery/nuclei/v2/cmd/nuclei \
-    # gitrob
+    && echo "project discovery nuclei" \
+        # git clone
+    && git clone https://github.com/projectdiscovery/nuclei.git /root/nuclei \
+        ; cd /root/nuclei/v2/cmd/nuclei/; go build; mv nuclei /go/bin/ ; cd \
+        # go get
+    # && GO111MODULE=on ; go get -u -v github.com/projectdiscovery/nuclei/v2/cmd/nuclei \
+    # && echo "gitrob # currently facing errors" \
     # && go get -u -v github.com/michenriksen/gitrob 
-    # go buster
+    && echo "gobuster" \
     && go get -u -v github.com/OJ/gobuster \
-    # aquatone
-    && go get -u github.com/michenriksen/aquatone
+    && echo "aquatone" \
+    && go get -u github.com/michenriksen/aquatone \
+    && echo "assetfinder" \
+    && go get -u -v github.com/tomnomnom/assetfinder \
+    && echo "meg" \
+    && go get -u -v github.com/tomnomnom/meg \
+    && echo "httprobe" \
+    && go get -u -v github.com/tomnomnom/httprobe
 
 FROM kalilinux/kali-rolling:latest
 
@@ -52,8 +62,8 @@ RUN \
         iputils-ping iproute2 net-tools \
         whois tcpdump \
         openssh-client ftp \
-        binutils \
-        # infosec tools
+        binutils dos2unix \
+        # testing tools
         dnsenum amass \
         gron jq \
         nmap ncat host \
