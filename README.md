@@ -82,6 +82,7 @@ The `unminify` command is for adding more tools based on category. It's a bash s
 
   - seclist
   - exrex
+  - crunch
   - PayloadsAllTheThings
 
 - ## socialeng
