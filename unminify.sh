@@ -1,5 +1,13 @@
 #!/usr/bin/bash
 
+# This script is made for Kali-Linux only,
+# unminify.sh Get's copied to the seccontainer docker image an unminify command
+
+# This script can work well on your Kali OS as well same as it works insider the contaienr
+
+# To run this script on you OS, run the command given below.
+# sudo bash unminify.sh
+
 # colors
 GREEN="\033[0;32m"
 LightBlue="\033[1;34m"
@@ -9,22 +17,28 @@ NC='\033[0m' # No Color
 
 # directory for git-cone tools
 if [ "$(whoami)" == "root" ];then
+    
     toolsDir="/$(whoami)/tools"
+
     if ! [ -e "$toolsDir" ];then
         echo "folder $toolsDir created for saving git clone"
         mkdir -p "$toolsDir"
     fi
+
 else
+    
     toolsDir="/home/$(whoami)/tools"
+    
     if ! [ -e "$toolsDir" ];then
         echo "folder $toolsDir created for saving git clone"
         mkdir -p "$toolsDir"
     fi
 fi
 
-# apt and pip tool name list
+# apt, pip, git tool name list
 aptTools=()
 pipTools=()
+gitRepos=()
 
 # print values present in array
 function showList
@@ -38,29 +52,48 @@ function showList
 # apt install values present in array
 function aptInstall
 {
-    list="$*"
-    for i in "${list[@]}";do
-        apt install -y $i
+    local list="$*"
+    
+    for package in "${list[@]}";do
+        apt install -y $package
     done
 }
 
 # pip install values present in array
 function pipInstall
 {
-    list="$*"
-    for i in ${list[@]};do
-        pip install -U "$i"
+    local list="$*"
+    
+    for package in ${list[@]};do
+        pip install -U "$package"
     done
 }
+
+# clone git repos to $toolsDir path
+function gitClone
+{
+    local list="$*"
+    
+    for repo in ${list[@]};do
+        folderName="$(echo $repo | grep -oE '\w+\.\w+$' | grep -oE '^\w+')"
+        git clone --depth 1 "$repo" "$toolsDir/$folderName"
+    done
+}
+
 
 # print list of tools which will get installed & ask to continue
 function askContinue 
 {
+    echo
     echo -e "${LightBlue}Following tools will get installed:${NC}"
     
     showList "${aptTools[@]}"
     showList "${pipTools[@]}"
 
+    echo -e "\n${LightBlue}Git clone repos${NC}\n"
+    showList "${gitRepos[@]}"
+    
+    echo 
     echo -e "Press ${CYAN}any-key${NC} to Continue -OR- ${RED}Ctrl-C${NC} to abort"
     read
 }
@@ -70,13 +103,13 @@ function askContinue
 function web {
         
     local aptTools=(
+        "hydra"
         "wpscan"
         "wafw00f"
         "whatweb"
         "sublist3r"
         "subjack"
         "wfuzz"
-        "dirbuster"
         "sqlmap"
         "sslscan"
         "knockpy"
@@ -85,21 +118,25 @@ function web {
     local pipTools=(
         "shodan"
         "dnstwist"
+        "py-altdns"
     )
 
+    local gitRepos=(
+        # Photon
+        "https://github.com/s0md3v/Photon.git"
+        # XSStrike XSS scanner.
+        "https://github.com/s0md3v/XSStrike.git"
+    )
     askContinue
 
-    aptInstall ${aptTools[@]}
+    aptInstall "${aptTools[@]}"
     pipInstall "${pipTools[@]}"
-    
+    gitClone "${gitRepos[@]}"
 
-    # Photon
-    git clone --depth 1 https://github.com/s0md3v/Photon $toolsDir/Photon
-    if [ -e $toolsDir/Photon/requirements.txt ];then pip install -r $toolsDir/Photon/requirements.txt;fi
-
-    # XSStrike XSS scanner.
-    git clone https://github.com/s0md3v/XSStrike.git $toolsDir/XSStrike
-    if [ -e $toolsDir/XSStrike/requirements.txt ];then pip install -r $toolsDir/XSStrike/requirements.txt;fi
+    # find all requirements.txt in $toolsDir and pip install
+    for requirements in $(find $toolsDir -type f -name "requirements.txt");do
+        pip install -U -r $requirements;
+    done
 
 }
 
@@ -128,30 +165,36 @@ function tor {
     # check tor
     echo "Checking Tor"
     curl -s --socks5 127.0.0.1:9050 'https://check.torproject.org/api/ip'
-    echo "Checking Tor from proxychains"
+    
+    echo -e "\nChecking Tor from proxychains"
     proxychains curl 'https://check.torproject.org/api/ip'
     echo
+
 }
 
 # wordlist & wordlist tools setup
 function wordlists {
 
     local aptTools=(
-        "seclists"
+        "crunch"
     )
     
     local pipTools=(
-    # regex fuzz wordlist generator
+        # regex fuzz wordlist generator
         "exrex"
     )
-
+    
+    local gitRepos=(
+        # PayloadsAllTheThings
+        "https://github.com/swisskyrepo/PayloadsAllTheThings.git"
+        "https://github.com/danielmiessler/SecLists.git"
+    )
     askContinue
 
     aptInstall "${aptTools[@]}"
     pipInstall "${pipTools[@]}"
+    gitClone "${gitRepos[@]}"
 
-    # PayloadsAllTheThings
-    git clone https://github.com/swisskyrepo/PayloadsAllTheThings.git $toolsDir/PayloadsAllTheThings
 }
 
 function social {
@@ -159,10 +202,10 @@ function social {
     aptTools=(
         "sherlock"
     )
-
     askContinue
     
     aptInstall "${aptTools[@]}"
+
 }
 
 # cases 
@@ -186,6 +229,7 @@ case $1 in
         social
     ;;
     *)
+        echo -e "unminify: It downloads and configures extra pentesting tools based on categories\n"
         echo "Usage:   unminify { web|wordlists|tor|social|all }"
         echo "Example: unminfy web"
         exit 1
