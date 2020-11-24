@@ -16,23 +16,10 @@ CYAN="\033[0;36m"
 NC='\033[0m' # No Color
 
 # directory for git-cone tools
-if [ "$(whoami)" == "root" ];then
-    
-    toolsDir="/$(whoami)/tools"
+toolsDir="$HOME/tools"
 
-    if ! [ -e "$toolsDir" ];then
-        echo "folder $toolsDir created for saving git clone"
-        mkdir -p "$toolsDir"
-    fi
-
-else
-    
-    toolsDir="/home/$(whoami)/tools"
-    
-    if ! [ -e "$toolsDir" ];then
-        echo "folder $toolsDir created for saving git clone"
-        mkdir -p "$toolsDir"
-    fi
+if ! [ -e $toolsDir ];then
+    mkdir $toolsDir;
 fi
 
 # apt, pip, git tool name list
