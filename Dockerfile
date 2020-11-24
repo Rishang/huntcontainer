@@ -15,16 +15,16 @@ RUN go get -u github.com/golang/dep/cmd/dep \
     && go get -u -v github.com/projectdiscovery/httpx/cmd/httpx \
     && echo "project discovery nuclei" \
         # git clone
-    && git clone https://github.com/projectdiscovery/nuclei.git /root/nuclei \
-        ; cd /root/nuclei/v2/cmd/nuclei/; go build; mv nuclei /go/bin/ ; cd \
+    # && git clone https://github.com/projectdiscovery/nuclei.git /root/nuclei \
+    #     ; cd /root/nuclei/v2/cmd/nuclei/; go build; mv nuclei /go/bin/ ; cd \
         # go get
-    # && GO111MODULE=on ; go get -u -v github.com/projectdiscovery/nuclei/v2/cmd/nuclei \
+    && GO111MODULE=on ; go get -u -v github.com/projectdiscovery/nuclei/v2/cmd/nuclei \
     # && echo "gitrob # currently facing errors" \
     # && go get -u -v github.com/michenriksen/gitrob 
     && echo "gobuster" \
     && go get -u -v github.com/OJ/gobuster \
     && echo "aquatone" \
-    && go get -u github.com/michenriksen/aquatone \
+    && go get -u -v  github.com/michenriksen/aquatone \
     && echo "assetfinder" \
     && go get -u -v github.com/tomnomnom/assetfinder \
     && echo "meg" \
@@ -63,13 +63,10 @@ RUN \
         whois tcpdump \
         openssh-client ftp \
         binutils dos2unix \
-        # testing tools
-        dnsenum amass \
-        gron jq \
-        nmap ncat host \
-        nikto exploitdb \
-        python3-minimal python3-distutils python3-dnspython \
-    # python & python pip
+        gron jq 
+
+# python & python pip
+RUN apt install -y python3-minimal python3-distutils python3-dnspython \
     && update-alternatives --install /usr/bin/python python /usr/bin/python3 1 \
     && curl https://bootstrap.pypa.io/get-pip.py -o get-pip.py \
     && python get-pip.py
@@ -97,5 +94,11 @@ RUN \
     && echo "export PATH=${PATH}" >> ~/.bashrc
 
 WORKDIR /root/test
+
+# testing tools
+RUN apt install -y dnsenum amass \
+        nmap \
+        ncat host \
+        nikto exploitdb 
 
 COPY ./unminify.sh /usr/bin/unminify
