@@ -18,7 +18,7 @@ RUN go get -u github.com/golang/dep/cmd/dep \
     # && git clone https://github.com/projectdiscovery/nuclei.git /root/nuclei \
     #     ; cd /root/nuclei/v2/cmd/nuclei/; go build; mv nuclei /go/bin/ ; cd \
         # go get
-    && GO111MODULE=on ; go get -u -v github.com/projectdiscovery/nuclei/v2/cmd/nuclei \
+    && go get -u -v github.com/projectdiscovery/nuclei/v2/cmd/nuclei \
     # && echo "gitrob # currently facing errors" \
     # && go get -u -v github.com/michenriksen/gitrob 
     && echo "gobuster" \
