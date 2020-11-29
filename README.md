@@ -2,6 +2,9 @@
 
 ## A Docker image containing setup of great sec tools
 
+**USECASE: When you want to run tools but you are on OS other than kali-linux, Eg: Windows, Ubuntu, Fedora
+and you can't or don't want to get into mess of installing and configurating things. and just want to get started.**
+
 **requirements:** Having Docker installed.
 
 ## Installation
@@ -16,7 +19,7 @@ Directly pull from dockerhub:
 
 You can save all testing outputs to path of /root/test while using bind mount volume. also that folder consist of `git init` so you can also set remote origin to your git repo and preform `git push` to save output, this will be good case while testing EC2 instance where we can easily setup many sec tools easily, perform quick tests and push outputs to your private github repo.
 
----------
+-----------------
 
 ## Tools inside image
 
@@ -32,16 +35,28 @@ This list of tools are already present within the image.
 - ssh
 - strings | strip
 
-### Testing tools
+-----------------
+
+### Testing Go tools
+
+- gau  github.com/lc/gau
+- gf | gf templates > github.com/tomnomnom/gf
+- go-dork > github.com/dwisiswant0/go-dork
+- fuff > github.com/ffuf/ffuf
+- gobuster > github.com/OJ/gobuster
+- aquatone > github.com/michenriksen/aquatone
+- httpx > github.com/projectdiscovery/httpx/cmd/httpx
+- nuclei | nuclei templates > github.com/projectdiscovery/nuclei/v2/cmd/nuclei
+- meg > github.com/tomnomnom/meg
+- assetfinder > github.com/tomnomnom/assetfinder
+- httprobe > github.com/tomnomnom/httprobe
+- subfinder  > github.com/projectdiscovery/subfinder/v2/cmd/subfinder
+
+-----------------
+
+### Testing kali-package tools
 
 - amass
-- gf | gf templates
-- gau
-- fuff
-- gobuster
-- aquatone
-- httpx
-- nuclei | nuclei templates
 - nmap
 - exploitdb
 - dnsenum
@@ -49,6 +64,8 @@ This list of tools are already present within the image.
 - nmap
 - ncat
 - nikto
+
+-----------------
 
 ## unminify
 
