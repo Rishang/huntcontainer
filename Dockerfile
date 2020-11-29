@@ -30,7 +30,9 @@ RUN go get -u github.com/golang/dep/cmd/dep \
     && echo "meg" \
     && go get -u -v github.com/tomnomnom/meg \
     && echo "httprobe" \
-    && go get -u -v github.com/tomnomnom/httprobe
+    && go get -u -v github.com/tomnomnom/httprobe \
+    && echo "go-dork" \
+    && go get -u  -v github.com/dwisiswant0/go-dork
 
 FROM kalilinux/kali-rolling:latest
 
@@ -63,10 +65,8 @@ RUN \
         whois tcpdump \
         openssh-client ftp \
         binutils dos2unix \
-        gron jq 
-
-# python & python pip
-RUN apt install -y python3-minimal python3-distutils python3-dnspython \
+        gron jq \
+        python3-minimal python3-distutils python3-dnspython \
     && update-alternatives --install /usr/bin/python python /usr/bin/python3 1 \
     && curl https://bootstrap.pypa.io/get-pip.py -o get-pip.py \
     && python get-pip.py
@@ -74,6 +74,7 @@ RUN apt install -y python3-minimal python3-distutils python3-dnspython \
 # workdir & bash shell theme (oh-my-bash)
 RUN bash -c "$(curl -fsSL https://raw.githubusercontent.com/ohmybash/oh-my-bash/master/tools/install.sh)" \
     && sed -i '/git/d' ~/.bashrc \
+    && sed -i 's/set -o noclobber/# set -o noclobber/' ~/.oh-my-bash/lib/shopt.sh \
     && echo "alias grep='grep --color=auto'" >> ~/.bashrc \
     && mkdir /root/test /root/tools \
     && git init /root/test 
