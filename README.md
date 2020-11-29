@@ -34,36 +34,35 @@ This list of tools are already present within the image.
 - whois | tcpdump
 - ssh
 - strings | strip
+- [gron](https://github.com/tomnomnom/gron)
 
 -----------------
 
 ### Testing Go tools
 
-- gau  github.com/lc/gau
-- gf | gf templates > github.com/tomnomnom/gf
-- go-dork > github.com/dwisiswant0/go-dork
-- fuff > github.com/ffuf/ffuf
-- gobuster > github.com/OJ/gobuster
-- aquatone > github.com/michenriksen/aquatone
-- httpx > github.com/projectdiscovery/httpx/cmd/httpx
-- nuclei | nuclei templates > github.com/projectdiscovery/nuclei/v2/cmd/nuclei
-- meg > github.com/tomnomnom/meg
-- assetfinder > github.com/tomnomnom/assetfinder
-- httprobe > github.com/tomnomnom/httprobe
-- subfinder  > github.com/projectdiscovery/subfinder/v2/cmd/subfinder
+- [gau](https://www.github.com/lc/gau)
+- [gf | gf templates](https://www.github.com/tomnomnom/gf)
+- [go-dork](https://www.github.com/dwisiswant0/go-dork)
+- [fuff](https://www.github.com/ffuf/ffuf)
+- [gobuster](https://www.github.com/OJ/gobuster)
+- [aquatone](https://www.github.com/michenriksen/aquatone)
+- [httpx](https://www.github.com/projectdiscovery/httpx/cmd/httpx)
+- [nuclei | nuclei templates](https://www.github.com/projectdiscovery/nuclei/v2/cmd/nuclei)
+- [meg](https://www.github.com/tomnomnom/meg)
+- [assetfinder](https://www.github.com/tomnomnom/assetfinder)
+- [httprobe](https://www.github.com/tomnomnom/httprobe)
+- [subfinder](https://www.github.com/projectdiscovery/subfinder/v2/cmd/subfinder)
 
 -----------------
 
 ### Testing kali-package tools
 
-- amass
-- nmap
-- exploitdb
-- dnsenum
-- gron
-- nmap
-- ncat
-- nikto
+- [amass](https://github.com/OWASP/Amass)
+- [exploitdb](https://www.exploit-db.com/)
+- [dnsenum](https://tools.kali.org/information-gathering/dnsenum)
+- [nmap](https://nmap.org/)
+- [netcat](https://en.wikipedia.org/wiki/Netcat)
+- [nikto](https://cirt.net/Nikto2)
 
 -----------------
 
@@ -80,31 +79,30 @@ The `unminify` command is for adding more tools based on category. It's a bash s
 
 - ## web
   
-  - shodan
-  - dnstwist
-  - XSStrike
-  - wpscan
-  - dirbuster
-  - sublist3r
-  - Photon
-  - whatweb
-  - wafw00f
-  - subjack
-  - wfuzz
-  - sqlmap
-  - sslscan
-  - knockpy
+  - [shodan](https://cli.shodan.io/)
+  - [dnstwist](https://github.com/elceef/dnstwist)
+  - [XSStrike](https://github.com/s0md3v/XSStrike)
+  - [wpscan](https://github.com/wpscanteam/wpscan)
+  - [sublist3r](https://github.com/aboul3la/Sublist3r)
+  - [Photon](https://github.com/s0md3v/Photon)
+  - [whatweb](https://github.com/urbanadventurer/WhatWeb)
+  - [wafw00f](https://github.com/EnableSecurity/wafw00f)
+  - [subjack](https://github.com/haccer/subjack)
+  - [wfuzz](https://github.com/xmendez/wfuzz)
+  - [sqlmap](https://github.com/sqlmapproject/sqlmap)
+  - [sslscan](https://github.com/rbsec/sslscan)
+  - [knockpy](https://github.com/guelfoweb/knock)
 
 - ## wordlists
 
-  - seclist
-  - exrex
-  - crunch
-  - PayloadsAllTheThings
+  - [seclist](https://github.com/danielmiessler/SecLists)
+  - [exrex](https://github.com/asciimoo/exrex)
+  - [crunch](https://tools.kali.org/password-attacks/crunch)
+  - [PayloadsAllTheThings](https://github.com/swisskyrepo/PayloadsAllTheThings)
 
 - ## socialeng
 
-  - sherlock
+  - [sherlock](https://github.com/sherlock-project/sherlock)
 
 - ## tor
 
