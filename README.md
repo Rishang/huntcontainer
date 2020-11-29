@@ -100,7 +100,7 @@ The `unminify` command is for adding more tools based on category. It's a bash s
   - [crunch](https://tools.kali.org/password-attacks/crunch)
   - [PayloadsAllTheThings](https://github.com/swisskyrepo/PayloadsAllTheThings)
 
-- ## socialeng
+- ## social
 
   - [sherlock](https://github.com/sherlock-project/sherlock)
 
