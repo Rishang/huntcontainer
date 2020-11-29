@@ -5,7 +5,7 @@
 **USECASE: When you want to run tools but you are on OS other than kali-linux, Eg: Windows, Ubuntu, Fedora
 and you can't or don't want to get into mess of installing and configurating things. and just want to get started.**
 
-**requirements:** Having Docker installed.
+**requirements:** Having Docker installed. [Install Docker](https://docs.docker.com/engine/install/)
 
 ## Installation
 
