@@ -2,7 +2,7 @@
 
 ## A Docker image containing setup of great sec tools
 
-**USECASE: When you want to run some testing-tools but you are on OS other than kali-linux, Eg: Windows, Ubuntu, Fedora
+**USECASE: When you want to run some testing-tools but you're on OS other than kali-linux, Eg: Windows, Ubuntu, Fedora
 and you can't or don't want to get into mess of installing and configurating things. and just want to get started.**
 
 **requirements:** Having Docker installed. [Install Docker](https://docs.docker.com/engine/install/)
