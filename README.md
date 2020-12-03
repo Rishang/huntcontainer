@@ -44,6 +44,7 @@ This list of tools are already present within the image.
 - [gf | gf templates](https://www.github.com/tomnomnom/gf)
 - [go-dork](https://www.github.com/dwisiswant0/go-dork)
 - [fuff](https://www.github.com/ffuf/ffuf)
+- [dns-x](https://www.github.com/projectdiscovery/dnsx/cmd/dnsx)
 - [gobuster](https://www.github.com/OJ/gobuster)
 - [aquatone](https://www.github.com/michenriksen/aquatone)
 - [httpx](https://www.github.com/projectdiscovery/httpx/cmd/httpx)

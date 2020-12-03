@@ -15,10 +15,9 @@ RUN go get -u github.com/golang/dep/cmd/dep \
     && go get -u -v github.com/projectdiscovery/httpx/cmd/httpx \
     && echo "project discovery nuclei" \
         # git clone
-    # && git clone https://github.com/projectdiscovery/nuclei.git /root/nuclei \
-    #     ; cd /root/nuclei/v2/cmd/nuclei/; go build; mv nuclei /go/bin/ ; cd \
-        # go get
-    && go get -u -v github.com/projectdiscovery/nuclei/v2/cmd/nuclei \
+    && git clone https://github.com/projectdiscovery/nuclei.git /root/nuclei \
+        ; cd /root/nuclei/v2/cmd/nuclei/; go build; mv nuclei /go/bin/ ; cd \
+    # && go get -u -v github.com/projectdiscovery/nuclei/v2/cmd/nuclei \
     # && echo "gitrob # currently facing errors" \
     # && go get -u -v github.com/michenriksen/gitrob 
     && echo "gobuster" \
@@ -32,7 +31,9 @@ RUN go get -u github.com/golang/dep/cmd/dep \
     && echo "httprobe" \
     && go get -u -v github.com/tomnomnom/httprobe \
     && echo "go-dork" \
-    && go get -u  -v github.com/dwisiswant0/go-dork
+    && go get -u  -v github.com/dwisiswant0/go-dork \
+    && echo "dns-x" \
+    && go get -u -v github.com/projectdiscovery/dnsx/cmd/dnsx
 
 FROM kalilinux/kali-rolling:latest
 
@@ -56,6 +57,7 @@ RUN \
     && apt update \
     && apt install --upgrade -y sudo musl \
         bash bash-completion \
+        make \
         curl wget \
         vim nano \
         git tmux \
