@@ -36,26 +36,6 @@ function showList
     done
 }
 
-# apt install values present in array
-function aptInstall
-{
-    local list="$*"
-    
-    for package in "${list[@]}";do
-        apt install -y $package
-    done
-}
-
-# pip install values present in array
-function pipInstall
-{
-    local list="$*"
-    
-    for package in ${list[@]};do
-        pip install -U "$package"
-    done
-}
-
 # clone git repos to $toolsDir path
 function gitClone
 {
@@ -116,8 +96,8 @@ function web {
     )
     askContinue
 
-    aptInstall "${aptTools[@]}"
-    pipInstall "${pipTools[@]}"
+    apt install -y "${aptTools[@]}"
+    pip install -U "${pipTools[@]}"
     gitClone "${gitRepos[@]}"
 
     # find all requirements.txt in $toolsDir and pip install
@@ -138,7 +118,7 @@ function tor {
     )
     askContinue
 
-    aptInstall "${aptTools[@]}"
+    apt install -y "${aptTools[@]}"
     
     service tor start
     
@@ -178,8 +158,8 @@ function wordlists {
     )
     askContinue
 
-    aptInstall "${aptTools[@]}"
-    pipInstall "${pipTools[@]}"
+    apt install -y "${aptTools[@]}"
+    pip install -U "${pipTools[@]}"
     gitClone "${gitRepos[@]}"
 
 }
@@ -191,7 +171,7 @@ function social {
     )
     askContinue
     
-    aptInstall "${aptTools[@]}"
+    apt install -y "${aptTools[@]}"
 
 }
 
