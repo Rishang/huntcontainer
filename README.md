@@ -44,6 +44,7 @@ This list of tools are already present within the image.
 - [gau](https://www.github.com/lc/gau)
 - [gf | gf templates](https://www.github.com/tomnomnom/gf)
 - [go-dork](https://www.github.com/dwisiswant0/go-dork)
+- [gitleaks](https://github.com/zricethezav/gitleaks)
 - [fuff](https://www.github.com/ffuf/ffuf)
 - [dns-x](https://www.github.com/projectdiscovery/dnsx/)
 - [gobuster](https://www.github.com/OJ/gobuster)
