@@ -8,7 +8,7 @@ rmi = docker rmi
 
 build:
 	# build Dockerfile
-	docker build -t ${image} .
+	docker build -t ${image} . | tee logs
 
 pull:
 	# pull ${image} from dockerhub
