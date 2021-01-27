@@ -34,6 +34,7 @@ This list of tools are already present within the image.
 - whois | tcpdump
 - ssh
 - strings | strip
+- [fzf](https://github.com/junegunn/fzf)
 - [gron](https://github.com/tomnomnom/gron)
 
 -----------------
