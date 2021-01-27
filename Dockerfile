@@ -1,39 +1,46 @@
 FROM golang:alpine AS go-build
 
 RUN apk add --no-cache --upgrade git openssh-client ca-certificates
-ENV GO111MODULE=auto
-RUN go get -u github.com/golang/dep/cmd/dep \
-    && echo "subfinder" \
-    && go get -u -v github.com/projectdiscovery/subfinder/v2/cmd/subfinder \
-    && echo "gau" \
-    && go get -u -v github.com/lc/gau \
-    && echo "fuff" \
-    && go get -u -v github.com/ffuf/ffuf \
-    && echo "gf" \
-    && go get -u -v github.com/tomnomnom/gf \
-    && echo "httpx" \
-    && go get -u -v github.com/projectdiscovery/httpx/cmd/httpx \
-    && echo "project discovery nuclei" \
-        # git clone
-    && git clone https://github.com/projectdiscovery/nuclei.git /root/nuclei \
-        ; cd /root/nuclei/v2/cmd/nuclei/; go build; mv nuclei /go/bin/ ; cd \
-    # && go get -u -v github.com/projectdiscovery/nuclei/v2/cmd/nuclei \
-    # && echo "gitrob # currently facing errors" \
-    # && go get -u -v github.com/michenriksen/gitrob 
-    && echo "gobuster" \
-    && go get -u -v github.com/OJ/gobuster \
-    && echo "aquatone" \
-    && go get -u -v  github.com/michenriksen/aquatone \
-    && echo "assetfinder" \
-    && go get -u -v github.com/tomnomnom/assetfinder \
-    && echo "meg" \
-    && go get -u -v github.com/tomnomnom/meg \
-    && echo "httprobe" \
-    && go get -u -v github.com/tomnomnom/httprobe \
-    && echo "go-dork" \
-    && go get -u  -v github.com/dwisiswant0/go-dork \
-    && echo "dns-x" \
-    && go get -u -v github.com/projectdiscovery/dnsx/cmd/dnsx
+
+RUN go get github.com/golang/dep/cmd/dep ;\
+    # subfinder
+    echo -e "github.com/projectdiscovery/subfinder/v2/cmd/subfinder \n \
+    # gau
+    github.com/lc/gau \n \
+    # ffuf
+    github.com/ffuf/ffuf \n \
+    # gf
+    github.com/tomnomnom/gf \n \
+    # httpx
+    github.com/projectdiscovery/httpx/cmd/httpx \n \
+    # nuclei
+    github.com/projectdiscovery/nuclei/v2/cmd/nuclei \n \
+    # gitrob
+    github.com/michenriksen/gitrob \n \
+    # gobuster
+    github.com/OJ/gobuster \n \
+    # aquatone
+    github.com/michenriksen/aquatone \n \
+    # assetfinder
+    github.com/tomnomnom/assetfinder \n \
+    # meg
+    github.com/tomnomnom/meg \n \
+    # httprobe
+    github.com/tomnomnom/httprobe \n \
+    # dnsx
+    github.com/projectdiscovery/dnsx/cmd/dnsx \n \
+    # gitleaks
+    github.com/zricethezav/gitleaks/v7" > /tmp/s_GO111MODULE_tools\
+    ; for tools in $( cat /tmp/s_GO111MODULE_tools );do \
+        sh -cx "GO111MODULE=on go get ${tools}"; echo -e "\n---------\n" \
+    ; done \
+    # Non - GO111MODULE
+    ;echo -e "github.com/Rishang/go-dork \n" \
+     > /tmp/s_tools \
+    ; for tools in $( cat /tmp/s_tools );do \
+        sh -cx "go get -u ${tools}"; echo -e "\n---------\n" \
+    ; done
+
 
 FROM kalilinux/kali-rolling:latest
 
@@ -48,8 +55,6 @@ ENV TERM="xterm-256color"
 ENV GOPATH='/root/go'
 ENV PATH="${PATH}:${GOPATH}/bin"
 
-COPY --from=go-build /go/bin/* /root/go/bin/
-
 # core packages
 RUN \
     # mirror deb-repo
@@ -57,7 +62,8 @@ RUN \
     && apt update \
     && apt install --upgrade -y sudo musl \
         bash bash-completion \
-        make \
+        make locales \
+        powerline fonts-powerline \
         curl wget \
         vim nano \
         git tmux \
@@ -71,15 +77,38 @@ RUN \
         python3-minimal python3-distutils python3-dnspython \
     && update-alternatives --install /usr/bin/python python /usr/bin/python3 1 \
     && curl https://bootstrap.pypa.io/get-pip.py -o get-pip.py \
-    && python get-pip.py
+    && python get-pip.py \
+    ;echo "LC_ALL=en_US.UTF-8" >> /etc/environment \
+    ;echo "en_US.UTF-8 UTF-8" >> /etc/locale.gen \
+    ;echo "LANG=en_US.UTF-8" > /etc/locale.conf \
+    && locale-gen en_US.UTF-8 
+
+# testing tools
+RUN apt install -y dnsenum amass \
+        nmap \
+        ncat host \
+        nikto exploitdb \
+        fzf
 
 # workdir & bash shell theme (oh-my-bash)
 RUN bash -c "$(curl -fsSL https://raw.githubusercontent.com/ohmybash/oh-my-bash/master/tools/install.sh)" \
     && sed -i '/git/d' ~/.bashrc \
+    && sed -i "s/clock_prompt//g" ~/.oh-my-bash/themes/font/font.theme.sh \
     && sed -i 's/set -o noclobber/# set -o noclobber/' ~/.oh-my-bash/lib/shopt.sh \
     && echo "alias grep='grep --color=auto'" >> ~/.bashrc \
-    && mkdir /root/test /root/tools \
-    && git init /root/test 
+    && mkdir ~/test /root/tools \
+    && git init /root/test \
+    && wget https://github.com/powerline/powerline/raw/develop/font/PowerlineSymbols.otf \
+    && wget https://github.com/powerline/powerline/raw/develop/font/10-powerline-symbols.conf \
+    && mkdir -p ~/.local/share/fonts/ ~/.config/fontconfig/conf.d/ \
+    && mv PowerlineSymbols.otf ~/.local/share/fonts/ \
+    && mv 10-powerline-symbols.conf ~/.config/fontconfig/conf.d/ \
+    && curl -fsSL "https://raw.githubusercontent.com/gpakosz/.tmux/master/.tmux.conf" -o ~/.tmux.conf \
+    && curl -fsSL "https://raw.githubusercontent.com/gpakosz/.tmux/master/.tmux.conf.local" -o ~/.tmux.conf.local \
+    && echo "tmux_conf_theme_left_separator_main='\uE0B0'\ntmux_conf_theme_left_separator_sub='\uE0B1'\ntmux_conf_theme_right_separator_main='\uE0B2'\ntmux_conf_theme_right_separator_sub='\uE0B3'" >> /root/.tmux.conf.local \
+    && touch /root/.hushlogin
+
+COPY --from=go-build /go/bin/* /root/go/bin/
 
 # go tools extras
 RUN \
@@ -97,11 +126,5 @@ RUN \
     && echo "export PATH=${PATH}" >> ~/.bashrc
 
 WORKDIR /root/test
-
-# testing tools
-RUN apt install -y dnsenum amass \
-        nmap \
-        ncat host \
-        nikto exploitdb 
 
 COPY ./unminify.sh /usr/bin/unminify
