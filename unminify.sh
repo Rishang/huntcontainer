@@ -15,6 +15,11 @@ RED="\033[0;31m"
 CYAN="\033[0;36m"
 NC='\033[0m' # No Color
 
+if ! [[ $(grep -i "kali-rolling" /etc/apt/sources.list) ]];then
+    echo "Scrip works on Kali-Linux other OS can have issues"
+    exit 1
+fi
+
 # directory for git-cone tools
 toolsDir="$HOME/tools"
 
@@ -26,9 +31,10 @@ fi
 aptTools=()
 pipTools=()
 gitRepos=()
+otherTools=()
 
 # print values present in array
-function showList
+function _showList
 {
     list="$*"
     for i in ${list[@]};do
@@ -37,7 +43,7 @@ function showList
 }
 
 # clone git repos to $toolsDir path
-function gitClone
+function _gitClone
 {
     local list="$*"
     
@@ -49,16 +55,17 @@ function gitClone
 
 
 # print list of tools which will get installed & ask to continue
-function askContinue 
+function _askContinue 
 {
     echo
-    echo -e "${LightBlue}Following tools will get installed:${NC}"
+    echo -e "${LightBlue}Following tools will get installed: at ${CYAN} $toolsDir ${NC}"
     
-    showList "${aptTools[@]}"
-    showList "${pipTools[@]}"
+    _showList "${aptTools[@]}"
+    _showList "${pipTools[@]}"
+    _showList "${otherTools[@]}"
 
     echo -e "\n${LightBlue}Git clone repos${NC}\n"
-    showList "${gitRepos[@]}"
+    _showList "${gitRepos[@]}"
     
     echo 
     echo -e "Press ${CYAN}any-key${NC} to Continue -OR- ${RED}Ctrl-C${NC} to abort"
@@ -67,7 +74,7 @@ function askContinue
 # -------------------------------------------------
 
 # web testing tools
-function web {
+function _web {
         
     local aptTools=(
         "hydra"
@@ -94,11 +101,28 @@ function web {
         # XSStrike XSS scanner.
         "https://github.com/s0md3v/XSStrike.git"
     )
-    askContinue
+    _askContinue
 
     apt install -y "${aptTools[@]}"
     pip install -U "${pipTools[@]}"
-    gitClone "${gitRepos[@]}"
+    _gitClone "${gitRepos[@]}"
+
+    # find all requirements.txt in $toolsDir and pip install
+    for requirements in $(find $toolsDir -type f -name "requirements.txt");do
+        pip install -U -r $requirements;
+    done
+
+}
+
+function _dorks {
+    
+    local gitRepos=(
+        # pagodo
+        "https://github.com/opsdisk/pagodo.git"
+    )
+    _askContinue
+
+    _gitClone "${gitRepos[@]}"
 
     # find all requirements.txt in $toolsDir and pip install
     for requirements in $(find $toolsDir -type f -name "requirements.txt");do
@@ -108,7 +132,7 @@ function web {
 }
 
 # tor setup
-function tor {
+function _tor {
     
     # tor proxychain setup
     local aptTools=(
@@ -116,7 +140,7 @@ function tor {
         "proxychains4"
         "curl"
     )
-    askContinue
+    _askContinue
 
     apt install -y "${aptTools[@]}"
     
@@ -140,7 +164,7 @@ function tor {
 }
 
 # wordlist & wordlist tools setup
-function wordlists {
+function _wordlists {
 
     local aptTools=(
         "crunch"
@@ -156,11 +180,11 @@ function wordlists {
         "https://github.com/swisskyrepo/PayloadsAllTheThings.git"
         "https://github.com/danielmiessler/SecLists.git"
     )
-    askContinue
+    _askContinue
 
     apt install -y "${aptTools[@]}"
     pip install -U "${pipTools[@]}"
-    gitClone "${gitRepos[@]}"
+    _gitClone "${gitRepos[@]}"
 
 }
 
@@ -169,7 +193,7 @@ function social {
     aptTools=(
         "sherlock"
     )
-    askContinue
+    _askContinue
     
     apt install -y "${aptTools[@]}"
 
@@ -178,22 +202,26 @@ function social {
 # cases 
 case $1 in
     web)
-        web
+        _web
+    ;;
+    dorks)
+        _dorks
     ;;
     tor)
-        tor
+        _tor
     ;;
     wordlists)
-        wordlists
+        _wordlists
     ;;
     social)
-        social
+        _social
     ;;
     all)
-        web
-        tor
-        wordlists
-        social
+        _web
+        _tor
+        _wordlists
+        _social
+        _dorks
     ;;
     *)
         echo -e "unminify: It downloads and configures extra pentesting tools based on categories\n"
