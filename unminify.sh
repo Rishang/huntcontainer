@@ -16,7 +16,7 @@ CYAN="\033[0;36m"
 NC='\033[0m' # No Color
 
 if ! [[ $(grep -i "kali-rolling" /etc/apt/sources.list) ]];then
-    echo "Scrip works on Kali-Linux other OS can have issues"
+    echo "Script works on Kali-Linux other OS can have issues"
     exit 1
 fi
 

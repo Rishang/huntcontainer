@@ -1,46 +1,10 @@
 FROM golang:alpine AS go-build
 
-RUN apk add --no-cache --upgrade git openssh-client ca-certificates
+RUN apk add --no-cache --upgrade git bash openssh-client ca-certificates
 
-RUN go get github.com/golang/dep/cmd/dep ;\
-    # subfinder
-    echo -e "github.com/projectdiscovery/subfinder/v2/cmd/subfinder \n \
-    # gau
-    github.com/lc/gau \n \
-    # ffuf
-    github.com/ffuf/ffuf \n \
-    # gf
-    github.com/tomnomnom/gf \n \
-    # httpx
-    github.com/projectdiscovery/httpx/cmd/httpx \n \
-    # nuclei
-    github.com/projectdiscovery/nuclei/v2/cmd/nuclei \n \
-    # gitrob
-    github.com/michenriksen/gitrob \n \
-    # gobuster
-    github.com/OJ/gobuster \n \
-    # aquatone
-    github.com/michenriksen/aquatone \n \
-    # assetfinder
-    github.com/tomnomnom/assetfinder \n \
-    # meg
-    github.com/tomnomnom/meg \n \
-    # httprobe
-    github.com/tomnomnom/httprobe \n \
-    # dnsx
-    github.com/projectdiscovery/dnsx/cmd/dnsx \n \
-    # gitleaks
-    github.com/zricethezav/gitleaks/v7" > /tmp/s_GO111MODULE_tools\
-    ; for tools in $( cat /tmp/s_GO111MODULE_tools );do \
-        sh -cx "GO111MODULE=on go get ${tools}"; echo -e "\n---------\n" \
-    ; done \
-    # Non - GO111MODULE
-    ;echo -e "github.com/Rishang/go-dork \n" \
-     > /tmp/s_tools \
-    ; for tools in $( cat /tmp/s_tools );do \
-        sh -cx "go get -u ${tools}"; echo -e "\n---------\n" \
-    ; done
+COPY ./.scripts/go-tools.sh /scripts/go-tools.sh
 
+RUN cat /scripts/go-tools.sh | bash
 
 FROM kalilinux/kali-rolling:latest
 
@@ -96,8 +60,6 @@ RUN bash -c "$(curl -fsSL https://raw.githubusercontent.com/ohmybash/oh-my-bash/
     && sed -i "s/clock_prompt//g" ~/.oh-my-bash/themes/font/font.theme.sh \
     && sed -i 's/set -o noclobber/# set -o noclobber/' ~/.oh-my-bash/lib/shopt.sh \
     && echo "alias grep='grep --color=auto'" >> ~/.bashrc \
-    && mkdir ~/test /root/tools \
-    && git init /root/test \
     && wget https://github.com/powerline/powerline/raw/develop/font/PowerlineSymbols.otf \
     && wget https://github.com/powerline/powerline/raw/develop/font/10-powerline-symbols.conf \
     && mkdir -p ~/.local/share/fonts/ ~/.config/fontconfig/conf.d/ \
@@ -123,7 +85,9 @@ RUN \
     # nuclei templates
     && nuclei -update-templates \
     # tmux PATH fix
-    && echo "export PATH=${PATH}" >> ~/.bashrc
+    && echo "export PATH=${PATH}" >> ~/.bashrc \
+    && mkdir ~/test /root/tools \
+    && git init /root/test
 
 WORKDIR /root/test
 
