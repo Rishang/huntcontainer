@@ -1,0 +1,31 @@
+name: DockerHub Release
+on:
+  release:
+    types: [published, edited]
+env:
+  DOCKER_BUILDKIT: 1
+
+jobs:
+  deploy:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v2
+      
+      - name: tag name
+        run: echo $GITHUB_REF_NAME
+      
+      - uses: docker/login-action@v2
+        with:
+          username: rishang
+          password: ${{ secrets.DOCKERHUB_TOKEN }}
+      
+      - name: build
+        run: |
+          docker build -t huntcontainer .
+          docker tag huntcontainer rishang/huntcontainer:$GITHUB_REF_NAME
+          docker tag huntcontainer rishang/huntcontainer:latest
+      
+      - name: push
+        run: |
+          docker push rishang/huntcontainer:$GITHUB_REF_NAME
+          docker push rishang/huntcontainer:latest
