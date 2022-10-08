@@ -1,4 +1,4 @@
-# Sec Container
+# Hunt Container
 
 ## A Docker image containing setup of great sec tools
 
